@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-skeleton-loader v-if='$fetchState.pending' type='card, card-heading' />
+    <v-skeleton-loader v-if='fetchLoad' type='card, card-heading' />
     <div v-else>
       <p class='display-1'>Users</p>
       {{ category }} {{ interest }}
@@ -9,6 +9,8 @@
         >
           <v-expansion-panel-header>
             Filter
+            <v-spacer />
+            <v-text-field />
           </v-expansion-panel-header>
 
           <v-expansion-panel-content>
@@ -54,6 +56,7 @@ export default {
   name: 'Home',
   data() {
     return {
+      fetchLoad: false,
       users: [],
       headers: [
         { text: 'User Name', value: 'userName' },
@@ -66,20 +69,24 @@ export default {
       categoriesFilter: [],
       interestsFilter: [],
       interest: '',
-      category: ''
+      category: '',
+      search: ''
     }
   },
   async fetch() {
+    this.fetchLoad = true
     try {
       this.users = await this.$axios.$get('/all')
       this.categoriesFilter = await this.$axios.$get('/categories')
       this.interestsFilter = await this.$axios.$get('/interests')
+      this.fetchLoad = false
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log('err', err.message)
       // eslint-disable-next-line no-console
       console.log('response', err.response)
       Report.failure('Error', 'Something went wrong', 'Ok')
+      this.fetchLoad = false
     }
   },
   head: {
