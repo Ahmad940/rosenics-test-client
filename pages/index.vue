@@ -90,6 +90,10 @@ export default {
       return this.users.filter((user) => {
         if (this.interest && this.category)
           return user.interest === this.interest || user.category === this.category
+        else if (this.interest && !this.category)
+          return user.interest === this.interest
+        else if (!this.interest && this.category)
+          return user.category === this.category
         return user
       })
     }
