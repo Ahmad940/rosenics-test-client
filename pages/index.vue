@@ -89,6 +89,7 @@ export default {
   async fetch() {
     this.fetchLoad = true
     try {
+      // fetching data from server
       this.users = await this.$axios.$get('/all')
       this.categoriesFilter = await this.$axios.$get('/categories')
       this.interestsFilter = await this.$axios.$get('/interests')
@@ -106,6 +107,7 @@ export default {
     title: 'Home'
   },
   computed: {
+    // filtering base on user selected data
     getUsers() {
       return this.users.filter((user) => {
         if (this.interest && this.category)
